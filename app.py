@@ -13,6 +13,15 @@ client= MongoClient("mongodb://db:27017")
 db= client.ImageRecognition
 users= db["Users"]
 
+def UserNotExist(username):
+    if users.find({"Username": username}).count()==0:
+
+    	return False 
+
+    else:
+        return True
+
+
 
 class Register(Resource):
     def post(self):
@@ -36,3 +45,9 @@ class Register(Resource):
             "Password": hashed_pw
             "Tokens": 4
         	})
+        retJson={
+            "status": 302,
+            "msg": "login successful"
+        }
+
+        return jsonify(retJson)
