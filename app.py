@@ -72,5 +72,24 @@ class Classify(Resource):
 
         r= requests.get(url)
         retJson ={}
-        
 
+        with open("temp.jpg","wb") as f:
+        	f.write(r.content)
+        	proc =subprocess.Popen('python classify_image.py --model_dir=. --image_file=./temp.jpg')
+            pro.communicate()[0]
+            proc.wait()
+            with open("text.txt") as g:
+            	retJson =json.load(g)
+
+        users.update({
+        	"Username": username
+        }, {
+            "$set":{
+               "Tokens": tokens-1
+            }
+
+
+        })
+         
+        return retJson
+        
