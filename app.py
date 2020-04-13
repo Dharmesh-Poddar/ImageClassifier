@@ -50,6 +50,8 @@ class Register(Resource):
 
         return jsonify(retJson)
 
+
+
 class Classify(Resource):
 	def post(self):
 		postedData= request.get_json()
@@ -92,4 +94,4 @@ class Classify(Resource):
         })
          
         return retJson
-        
+
