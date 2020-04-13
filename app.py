@@ -7,7 +7,7 @@ import subprocess
 import json
 
 app= Flask(__name__)
-api=Api(app)
+api= Api(app)
 
 client= MongoClient("mongodb://db:27017")
 db= client.ImageRecognition
@@ -89,21 +89,21 @@ class Classify(Resource):
 		retJson,error= verifyCredentials(username, password)
         
         if error:
-        	return jsonify(retJson)
+            return jsonify(retJson)
 
         tokens= users.find({
         	"Username":username
         	})[0]["Tokens"]
 
-        if tokens<=0
+        if tokens<=0:
             return jsonify( generateReturnDictionary(303,"Not Enough Tokens"))
 
         r= requests.get(url)
         retJson ={}
 
         with open("temp.jpg","wb") as f:
-        	f.write(r.content)
-        	proc =subprocess.Popen('python classify_image.py --model_dir=. --image_file=./temp.jpg')
+            f.write(r.content)
+            proc= subprocess.Popen('python classify_image.py --model_dir=. --image_file=./temp.jpg')
             pro.communicate()[0]
             proc.wait()
             with open("text.txt") as g:
@@ -144,11 +144,11 @@ class Refill(Resource):
 
         })
         
-        return jsonify(generateReturnDictionary(200,"Refilled successfully")
+        return jsonify(generateReturnDictionary(200,"Refilled successfully"))
 
-api.add_resource(Register,'/register')
-api.add_resource(Classify,'/classify')
-api.add_resource(Refill,'/refill')
+api.add_resource(Register, '/register')
+api.add_resource(Classify, '/classify')
+api.add_resource(Refill, '/refill')
 
 if __name__ =="__main__":
 	app.run(debug=True)
