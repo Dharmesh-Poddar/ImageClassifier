@@ -32,17 +32,15 @@ class Register(Resource):
         if UserNotExist(username):
         	retJson={
                 "status":301,
-                "msg": "user do not exist"
+                "msg": "user do not exist"}
 
-        	}
-
-            return jsonify(retJson)
+                return jsonify(retJson)
 
         hashed_pw=bcrypt.hashpw(password.encode("utf8"),bcrypt.gensalt())
 
         users.insert({
-            "Username": username
-            "Password": hashed_pw
+            "Username": username,
+            "Password": hashed_pw, 
             "Tokens": 4
         	})
         retJson={
@@ -51,3 +49,28 @@ class Register(Resource):
         }
 
         return jsonify(retJson)
+
+class Classify(Resource):
+	def post(self):
+		postedData= request.get_json()
+
+		username = postedData["username"]
+		password = postedData["password"]
+		ur       = postedData["url"]
+
+		retJson,error= verifyCredentials(username, password)
+        
+        if error:
+        	return jsonify(retJson)
+
+        tokens= users.find({
+        	"Username":username
+        	})[0]["Tokens"]
+
+        if tokens<=0
+            return jsonify( generateReturnDictionary(303,"Not Enough Tokens"))
+
+        r= requests.get(url)
+        retJson ={}
+        
+
