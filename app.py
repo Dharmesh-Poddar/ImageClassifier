@@ -50,7 +50,14 @@ class Register(Resource):
 
         return jsonify(retJson)
 
+def verifyCredentials(username, password):
+	if not UserNotExist(username):
+		return generateReturnDictionary(301,"Invalid USername"),True
 
+	correct_pw= verify_pw(username,password)
+	if not correct_pw:
+		return generateReturnDictionary(302,"Invalid Password"),True
+	return None,False 
 
 class Classify(Resource):
 	def post(self):
