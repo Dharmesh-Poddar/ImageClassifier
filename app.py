@@ -49,6 +49,25 @@ class Register(Resource):
         }
 
         return jsonify(retJson)
+def verify_pw(username, password):
+	if not UserNotExist(username):
+		return False
+
+	hashed_pw =users.find({
+		"Username":username
+		})[0]["Password"]
+
+	if bcrypt.hashed_pw(password.encode('utf8'),hashed_pw)==hashed_pw:
+		return True
+	else:
+		return False
+
+def generateReturnDictionary(status,msg):
+	retJson={
+	    "status": status,
+	    "msg": msg
+	}
+	return retJson 
 
 def verifyCredentials(username, password):
 	if not UserNotExist(username):
